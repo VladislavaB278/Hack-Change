@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr
 
 
-class UserRead(BaseModel):
+class UsersRead(BaseModel):
     id: int
     username: str
     email: EmailStr
@@ -11,11 +11,11 @@ class UserRead(BaseModel):
     is_admin: bool
 
 
-class UserSchema(UserRead):
+class UsersSchema(UsersRead):
     password: str
 
 
-class UserCreate(BaseModel):
+class UsersCreate(BaseModel):
     username: str
     email: EmailStr
     password: str
@@ -28,7 +28,7 @@ class TokenResponse(BaseModel):
     expires_in: int
 
 
-class UserAdmin(BaseModel):
+class UsersAdmin(BaseModel):
     id: int | None = None
     username: str | None = None
     email: EmailStr | None = None

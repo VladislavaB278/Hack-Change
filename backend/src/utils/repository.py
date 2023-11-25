@@ -47,6 +47,8 @@ class SQLAlchemyRepository(AbstractRepository):
         res = self.model(**data)
         self.session.add(res)
         await self.session.commit()
+        await self.session.refresh(res)
+        return res
 
     async def edit_one(self, id: int, data: dict) -> int:
         stmt = update(self.model).values(**data).filter_by(id=id).returning(self.model.id)
@@ -78,7 +80,7 @@ class SQLAlchemyRepository(AbstractRepository):
         res = res[0].to_read_model()
         return res
 
-    async def find(self, **filter_by):
+    async def find(self, raw=False, **filter_by):
         stmt = select(self.model).filter_by(**filter_by)
         res = await self.session.execute(stmt)
         res = res.scalars().all()

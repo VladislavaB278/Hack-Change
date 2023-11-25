@@ -1,12 +1,12 @@
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
-from src.schemas.users import UserAdmin, UserCreate
+from src.schemas.users import UsersAdmin, UsersCreate
 from src.security import get_password_hash
 from src.utils.unitofwork import IUnitOfWork
 
 
-async def create_user(uow: IUnitOfWork, data: UserCreate | UserAdmin):
+async def create_user(uow: IUnitOfWork, data: UsersCreate | UsersAdmin):
     async with uow:
         user = await uow.users.find_one(username=data.username, raw=True, no_error=True)
 
@@ -21,7 +21,7 @@ async def create_user(uow: IUnitOfWork, data: UserCreate | UserAdmin):
         return JSONResponse(content=payload)
 
 
-async def update_user_query(uow: IUnitOfWork, user, data: UserAdmin | UserCreate):
+async def update_user_query(uow: IUnitOfWork, user, data: UsersAdmin | UsersCreate):
     named_user = await uow.users.find_one(username=data.username, no_error=True)
     if named_user and named_user[0].username != user.username:
         raise HTTPException(status_code=422, detail="A user with the same name already exists.")
@@ -29,7 +29,7 @@ async def update_user_query(uow: IUnitOfWork, user, data: UserAdmin | UserCreate
     return res
 
 
-async def update_user(uow: IUnitOfWork, user, data: UserAdmin | UserCreate):
+async def update_user(uow: IUnitOfWork, user, data: UsersAdmin | UsersCreate):
     data.password = get_password_hash(data.password)
     async with uow:
         await update_user_query(uow, user, data)

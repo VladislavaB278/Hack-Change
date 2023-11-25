@@ -20,8 +20,6 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
 @as_declarative()
 class Base:
-    id: Mapped[int] = mapped_column(primary_key=True)
-
     @classmethod
     @declared_attr
     def __tablename__(cls) -> str:

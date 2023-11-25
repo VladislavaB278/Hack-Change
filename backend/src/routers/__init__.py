@@ -1,3 +1,3 @@
-from . import auth, users
+from . import auth, users, rooms
 
-routers = (auth.router, users.router)
+routers = (auth.router, users.router, rooms.router)
